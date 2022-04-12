@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { USER_PER_PAGE } from './utils/constants';
 
-export default function DataTable({ rows }) {
-  const columns = rows[0] && Object.keys(rows[0]);
+const DataTable = ({ rows, page }) => {
+  const startIndex = (page - 1) * USER_PER_PAGE;
+  const selectedUsers = rows.slice(startIndex, startIndex + USER_PER_PAGE);
+  const columns = selectedUsers[0] && Object.keys(rows[0]);
+
   return (
-    <table cellPadding={0} cellSpacing={0}>
+    <table>
       <thead>
-        <tr>{rows[0] && columns.map((header) => <th> {header}</th>)}</tr>
+        <tr>
+          {selectedUsers[0] && columns.map((header) => <th>{header}</th>)}
+        </tr>
       </thead>
       <tbody>
-        {rows.map((data) => (
+        {selectedUsers.map((data, key) => (
           <tr>
             {columns.map((columns) => (
               <td>{data[columns]}</td>
@@ -18,4 +24,5 @@ export default function DataTable({ rows }) {
       </tbody>
     </table>
   );
-}
+};
+export default DataTable;
